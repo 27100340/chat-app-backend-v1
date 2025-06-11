@@ -1,1 +1,7 @@
+/sushi/Documents/chat-app/backend/.gitignore
+__pycache__
+*.pyc
 .env
+.venv
+env/
+venv/
