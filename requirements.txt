@@ -5,3 +5,4 @@ pymongo
 python-jose[cryptography]
 passlib[bcrypt]
 certifi
+mangum

@@ -1,6 +1,7 @@
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.api import router  # Change here to import router correct location
+from api.api import router
 
 app = FastAPI(
     title="Baqir's Chat app backend",
@@ -10,7 +11,8 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],  # allow your frontend origin
+    # Update to allow your production frontend domain
+    allow_origins=["http://127.0.0.1:5500", "https://your-frontend-domain.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -22,6 +24,4 @@ app.include_router(router, prefix="/api/v1", tags=["todos"])
 def read_root():
     return {"message": "Welcome to Baqir's Chat app, please use an authenticated front end application to use this service!"}
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+# Remove the __main__ block as Vercel handles the server
