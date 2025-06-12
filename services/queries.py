@@ -82,6 +82,15 @@ class MessageQueryService:
             return []
         return messages
     
+    def get_messages_for_user(self, user_id: str) -> list[MessageDTO]:
+        messages = self.uow.connection.db["messages"].find({
+            "$or": [
+                {"sender_id": user_id},
+                {"reciever_user_id": user_id}
+            ]
+        }).sort("sent_at", -1)
+        return [MessageDTO(**msg) for msg in messages]
+    
     def get_messages_for_group(self, group_id: str) -> list[MessageDTO]:
         messages = self.uow.connection.db["messages"].find({"reciever_group_id": group_id})
         messages = [MessageDTO(**message) for message in messages]

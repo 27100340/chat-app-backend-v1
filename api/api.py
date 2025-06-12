@@ -99,6 +99,12 @@ def get_message(message_id: str, uow: UnitOfWork = Depends(get_uow)):
         raise HTTPException(status_code=404, detail="Message not found")
     return message.dict()
 
+@router.get("/messages/user/{user_id}")
+def get_messages_for_user(user_id: str, uow: UnitOfWork = Depends(get_uow)):
+    msg_query = MessageQueryService(uow)
+    messages = msg_query.get_messages_for_user(user_id)
+    return {"messages": [m.dict() for m in messages]}
+
 @router.get("/messages/sender/{sender_id}")
 def get_messages_by_sender(sender_id: str, uow: UnitOfWork = Depends(get_uow)):
     msg_query = MessageQueryService(uow)
@@ -389,7 +395,7 @@ async def websocket_endpoint(websocket: WebSocket):
                             }
                         })
                     except Exception as e:
-                        print(f"Error sending to receiver: {e}")
+                        print(f"Error sending to receiver with id: {receiver_id} Exception: {e}")
 
             # Send confirmation back to sender
             await websocket.send_json({
